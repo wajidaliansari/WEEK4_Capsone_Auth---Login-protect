@@ -18,7 +18,7 @@ if not SUPABASE_URL or not SUPABASE_KEY:
 # Initialize Supabase client
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# Initialize FastAPI app (Yahi line miss ho gayi thi)
+# Initialize FastAPI app
 app = FastAPI(title="Secure API with Supabase Auth")
 
 @app.on_event("startup")
@@ -37,21 +37,21 @@ class UserCredentials(BaseModel):
 @app.post("/auth/signup", status_code=201)
 def signup(user: UserCredentials):
     try:
-        # Supabase mein user register karein
+        # Supabase mein user register 
         res = supabase.auth.sign_up({
             "email": user.email,
             "password": user.password
         })
         return res
     except Exception as e:
-        # Agar user already exist karta hai ya koi error hai
+        
         raise HTTPException(status_code=400, detail=str(e))
 
 # 3. Log In Route
 @app.post("/auth/login", status_code=200)
 def login(user: UserCredentials):
     try:
-        # Supabase mein login karein
+       
         res = supabase.auth.sign_in_with_password({
             "email": user.email,
             "password": user.password
@@ -60,3 +60,23 @@ def login(user: UserCredentials):
     except Exception as e:
         # Agar password galat hai toh 401 error return karein
         raise HTTPException(status_code=401, detail="Invalid login credentials")
+    
+
+# 4. Public Route 
+@app.get("/public/info", status_code=200)
+def public_info():
+    return {"message": "Welcome stranger! This info is public."}
+
+# 5. Protected Route 
+@app.get("/protected/profile")
+def get_profile(authorization: str = Header(default=None)):
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Access token required")
+    
+    
+    token = authorization.split(" ")[1]
+    if not token:
+        raise HTTPException(status_code=401, detail="Access token required")
+
+    return {"message": "You reached the protected area!", "token_provided": token}
