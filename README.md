@@ -65,11 +65,3 @@ FastAPI's `HTTPBearer` security scheme has been configured. To access protected 
 * **Prompting Lessons:** I learned that unless explicitly told, AI might assume default token expiration times or forget to map specific error codes like `401 Unauthorized` for tampered tokens over generic `500 Server Errors`.
 
 ### 📸 Proof of Execution (Screenshots)
-
-**1. Swagger UI Auth Setup & Successful Login**
-![Login Setup](Screenshot%202026-09-17%20092018.png)
-![Token Received](Screenshot%202026-09-17%20092057.png)
-
-**2. Accessing Protected Route (200 OK)**
-![Locked Route Accessed](Screenshot%202026-09-17%20092206.png)
-![Data Fetched Successfully](Screenshot%202026-09-17%20092227.png)
