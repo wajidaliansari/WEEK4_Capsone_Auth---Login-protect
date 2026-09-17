@@ -1,10 +1,3 @@
-<img width="1917" height="1022" alt="Screenshot 2026-09-17 092018" src="https://github.com/user-attachments/assets/8bd8d08e-d0cc-4ef7-9266-ddababb98536" />
-
-<img width="1917" height="927" alt="Screenshot 2026-09-17 092057" src="https://github.com/user-attachments/assets/4879799e-af88-4e67-b1a7-ee9c1d240753" />
-
-<img width="1917" height="927" alt="Screenshot 2026-09-17 092206" src="https://github.com/user-attachments/assets/e54fdf2d-fef8-4c5b-923e-0256c761ad1c" />
-
-<img width="1917" height="856" alt="Screenshot 2026-09-17 092227" src="https://github.com/user-attachments/assets/b8da248e-0245-40be-a624-84b9e649fe02" />
 
 # Secure Auth API with FastAPI & Supabase
 **Author:** Wajid Ali Ansari  
