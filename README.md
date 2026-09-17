@@ -1,5 +1,14 @@
-# Secure Auth API with FastAPI & Supabase
+<img width="1600" height="852" alt="img1 jpeg" src="https://github.com/user-attachments/assets/08dc30cc-cfa7-4025-8c24-b42e541dd702" />
 
+<img width="1600" height="772" alt="img2 jpeg" src="https://github.com/user-attachments/assets/f00a059d-0a76-4860-a82a-938196ce9ea0" />
+
+<img width="1600" height="712" alt="img3 jpeg" src="https://github.com/user-attachments/assets/c3792920-6065-4fe5-8c3e-c537a2598181" />
+
+<img width="1600" height="772" alt="img4 jpeg" src="https://github.com/user-attachments/assets/50b1233d-d395-45c2-8d50-3056207f2bdc" />
+
+
+
+# Secure Auth API with FastAPI & Supabase
 **Author:** Wajid Ali Ansari  
 **Track:** FlyRank Backend Internship - Week 2 (Auth: Login & Protect)
 
@@ -65,6 +74,7 @@ FastAPI's `HTTPBearer` security scheme has been configured. To access protected 
 * **Prompting Lessons:** I learned that unless explicitly told, AI might assume default token expiration times or forget to map specific error codes like `401 Unauthorized` for tampered tokens over generic `500 Server Errors`.
 
 ### 📸 Proof of Execution (Screenshots)
+
 **1. Swagger UI Auth Setup & Successful Login**
 ![Login Setup](img1.jpeg)
 ![Token Received](img2.jpeg)
