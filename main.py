@@ -1,82 +1,65 @@
-import os
-from fastapi import FastAPI
-from supabase import create_client, Client
-from dotenv import load_dotenv
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
-from fastapi import HTTPException
+import os
+from dotenv import load_dotenv
+from supabase import create_client, Client
 
-# Load environment variables
+
 load_dotenv()
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
-SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 
-# Check if keys exist
-if not SUPABASE_URL or not SUPABASE_KEY:
-    raise ValueError("Supabase credentials not found in .env file")
-
-# Initialize Supabase client
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+app = FastAPI(title="Auth - Login & Protect API")
 
-# Initialize FastAPI app
-app = FastAPI(title="Secure API with Supabase Auth")
 
-@app.on_event("startup")
-async def startup_event():
-    print("Server running and connected to Supabase")
+security = HTTPBearer()
 
-@app.get("/")
-def root():
-    return {"status": "Server is up and running!"}
 
 class UserCredentials(BaseModel):
     email: str
     password: str
 
-# 2. Sign Up Route
+
 @app.post("/auth/signup", status_code=201)
 def signup(user: UserCredentials):
     try:
-        # Supabase mein user register 
-        res = supabase.auth.sign_up({
+        response = supabase.auth.sign_up({
             "email": user.email,
             "password": user.password
         })
-        return res
+        return response
     except Exception as e:
-        
         raise HTTPException(status_code=400, detail=str(e))
-
-# 3. Log In Route
+    
 @app.post("/auth/login", status_code=200)
 def login(user: UserCredentials):
     try:
-       
-        res = supabase.auth.sign_in_with_password({
+        response = supabase.auth.sign_in_with_password({
             "email": user.email,
             "password": user.password
         })
-        return res
+        return response
     except Exception as e:
-        # Agar password galat hai toh 401 error return karein
-        raise HTTPException(status_code=401, detail="Invalid login credentials")
-    
+         
+        raise HTTPException(status_code=401, detail=f"Login failed: {str(e)}")
 
-# 4. Public Route 
-@app.get("/public/info", status_code=200)
-def public_info():
-    return {"message": "Welcome stranger! This info is public."}
 
-# 5. Protected Route 
+def verify_access_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
+    try:
+        # Supabase se token verify karwayen
+        user_response = supabase.auth.get_user(token)
+        return user_response
+    except Exception as e:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+
+
 @app.get("/protected/profile")
-def get_profile(authorization: str = Header(default=None)):
-    
-    if not authorization or not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="Access token required")
-    
-    
-    token = authorization.split(" ")[1]
-    if not token:
-        raise HTTPException(status_code=401, detail="Access token required")
-
-    return {"message": "You reached the protected area!", "token_provided": token}
+def get_profile(current_user = Depends(verify_access_token)):
+    return {
+        "message": "Welcome! You have successfully accessed the protected route.",
+        "user_data": current_user
+    }
